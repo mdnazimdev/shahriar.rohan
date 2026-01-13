@@ -6,11 +6,11 @@
   <title>Certificate Verification Portal — Varendra University</title>
 
   <!--
-    Certificate Verification Portal
+    Updated: Responsive navbar behavior on mobile
+    - On desktop/tablet the title remains visually centered in the navbar.
+    - On small screens (mobile) the title moves to the right of the logo (no overlay).
     - Single-file static site (HTML + internal CSS + internal JS)
-    - University: Varendra University (assets from vu.edu.bd)
-    - Footer text (per requirements): "© Barendra University | Certificate Verification System"
-    - Responsive, accessible, semantic markup
+    - University assets from vu.edu.bd
   -->
 
   <style>
@@ -46,8 +46,8 @@
 
     /* ==========================
        NAVBAR
-       Fixed height; title centered horizontally and vertically.
-       Logo left-aligned.
+       Fixed height; title centered horizontally and vertically on larger screens.
+       On mobile the title will be positioned to the right of the logo (no overlay).
        ========================== */
     header.site-header{
       background: var(--navbar-bg);
@@ -89,7 +89,7 @@
       flex:0 0 auto;
     }
 
-    /* Centered title absolutely positioned within .nav-inner */
+    /* Centered title absolutely positioned within .nav-inner (desktop/tablet) */
     .nav-title{
       position:absolute;
       left:50%;
@@ -254,12 +254,30 @@
 
     /* ==========================
        Responsive tweaks
+       - Key change: on small screens move title to the right of the logo.
+       - The title becomes part of the normal flow (no absolute centering).
        ========================== */
     @media (max-width:640px){
-      .nav-inner{padding:0 12px}
+      .nav-inner{
+        padding:0 12px;
+        justify-content:flex-start; /* align items from left (logo then title) */
+      }
+
       .brand img{height:40px}
-      .nav-spacer{width:48px}
-      .nav-title{font-size:0.98rem}
+      .nav-spacer{display:none} /* not needed on mobile */
+
+      /* Make the title flow to the right of the logo on mobile */
+      .nav-title{
+        position:static;          /* remove absolute centering */
+        transform:none;
+        left:auto;
+        top:auto;
+        margin-left:12px;         /* spacing between logo and title */
+        font-size:1rem;
+        text-align:left;
+        white-space:normal;
+        display:block;
+      }
 
       .card{
         padding:16px;
@@ -284,10 +302,10 @@
         <img src="https://vu.edu.bd/assets/img/logo.png" alt="Varendra University logo" />
       </div>
 
-      <!-- Centered page title (visually centered in navbar, horizontally and vertically) -->
+      <!-- Centered page title on larger screens; on mobile this will be shown to the right of the logo -->
       <h1 class="nav-title" aria-hidden="false">Certificate Verification Portal</h1>
 
-      <!-- spacer to balance layout; can be used for future right-side controls -->
+      <!-- spacer to balance layout on larger screens; hidden on mobile -->
       <div class="nav-spacer" aria-hidden="true"></div>
     </div>
   </header>
@@ -309,7 +327,7 @@
 
     <!-- Centered overlay text -->
     <div class="hero-overlay" aria-hidden="false">
-      
+      <h1>Official Certificate Verification</h1>
     </div>
   </section>
 
@@ -379,7 +397,7 @@
   <footer class="site-footer" role="contentinfo">
     <div class="wrap">
       <!-- Footer text required exactly as specified -->
-      <div>© Varendra University | Certificate Verification System</div>
+      <div>© Barendra University | Certificate Verification System</div>
     </div>
   </footer>
 
@@ -399,14 +417,42 @@
     (function () {
       'use strict';
 
-      // Example: announce to screen readers on page load that certificate is verified.
-      // Keeps the page accessible and makes it obvious to assistive tech.
+      // Accessibility: label the status pill for assistive tech
       try {
         var liveStatus = document.querySelector('.status-pill');
         if (liveStatus) {
-          // Add an accessible description
           liveStatus.setAttribute('aria-label', 'Certificate status: verified');
         }
+
+        // Optional: ensure the navbar title does not overlap logo on dynamic zoom/resizes.
+        // On some narrow viewports the CSS handles layout; this script is a safe no-op fallback.
+        var navTitle = document.querySelector('.nav-title');
+        var brand = document.querySelector('.brand');
+        function ensureNavLayout() {
+          if (!navTitle || !brand) return;
+          var viewport = window.innerWidth || document.documentElement.clientWidth;
+          if (viewport <= 640) {
+            // Ensure title is readable to the right of logo
+            navTitle.style.position = 'static';
+            navTitle.style.marginLeft = '12px';
+            navTitle.style.whiteSpace = 'normal';
+          } else {
+            // Restore centered behavior on larger viewports
+            navTitle.style.position = '';
+            navTitle.style.transform = '';
+            navTitle.style.left = '';
+            navTitle.style.top = '';
+            navTitle.style.marginLeft = '';
+            navTitle.style.whiteSpace = '';
+          }
+        }
+        // Call once and on resize (debounced)
+        ensureNavLayout();
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(ensureNavLayout, 120);
+        });
       } catch (e) {
         // Fail silently; JS is non-critical for this static page.
         console.error('Certificate portal script error', e);
