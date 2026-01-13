@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification Portal - Barendra University</title>
+    <style>
+        /* ==================== GENERAL STYLES ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        nav {
+            background-color: rgb(12, 42, 66);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-logo img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .navbar-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================== HERO/BANNER SECTION ==================== */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: linear-gradient(rgba(12, 42, 66, 0.5), rgba(12, 42, 66, 0.5));
+        }
+
+        .hero-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(12, 42, 66, 0.4);
+        }
+
+        .hero-text {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            min-height: calc(100vh - 80px - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==================== CERTIFICATE CARD ==================== */
+        .certificate-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .certificate-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgb(12, 42, 66);
+            padding-bottom: 1rem;
+        }
+
+        .card-title {
+            color: rgb(12, 42, 66);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Certificate Info Section */
+        .certificate-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .info-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgb(12, 42, 66);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Status Badge */
+        .status-field {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid #a5d6a7;
+        }
+
+        .checkmark {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background-color: rgb(12, 42, 66);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.95rem;
+            margin-top: auto;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* ==================== RESPONSIVE DESIGN ==================== */
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .navbar-title {
+                font-size: 1.2rem;
+            }
+
+            .hero-section {
+                height: 200px;
+            }
+
+            .hero-text {
+                font-size: 1.8rem;
+            }
+
+            .main-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .certificate-card {
+                padding: 2rem;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .status-field {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .navbar-logo img {
+                height: 40px;
+            }
+
+            .navbar-title {
+                font-size: 1rem;
+            }
+
+            .hero-section {
+                height: 150px;
+            }
+
+            .hero-text {
+                font-size: 1.3rem;
+            }
+
+            .certificate-card {
+                padding: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+
+            .info-label {
+                font-size: 0.75rem;
+            }
+
+            .info-value {
+                font-size: 0.95rem;
+            }
+
+            .status-badge {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="navbar-container">
+            <!-- University Logo -->
+            <div class="navbar-logo">
+                <img 
+                    src="https://vu.edu.bd/assets/img/logo.png" 
+                    alt="Barendra University Logo"
+                    loading="lazy"
+                >
+            </div>
+            <!-- Portal Title -->
+            <h1 class="navbar-title">Certificate Verification Portal</h1>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO/BANNER SECTION ==================== -->
+    <section class="hero-section" role="img" aria-label="Banner image">
+        <img 
+            src="https://vu.edu.bd/storage/uploads/slider/main/1768287942_Website%20Banner%20(11).png" 
+            alt="Certificate Verification Banner"
+            loading="lazy"
+        >
+        <div class="hero-overlay">
+            <h2 class="hero-text">Official Certificate Verification</h2>
+        </div>
+    </section>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main-container">
+        <!-- Certificate Verification Result Card -->
+        <article class="certificate-card">
+            <!-- Card Header -->
+            <div class="card-header">
+                <h2 class="card-title">Certificate Verification Result</h2>
+                <p class="card-subtitle">Barendra University</p>
+            </div>
+
+            <!-- Certificate Information -->
+            <section class="certificate-info">
+                <!-- Row 1: Student Name and Degree -->
+                <div class="info-row">
+                    <div class="info-field">
+                        <label class="info-label">Student Name</label>
+                        <span class="info-value">Shahriar Rohan</span>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">Degree</label>
+                        <span class="info-value">BBA</span>
+                    </div>
+                </div>
+
+                <!-- Row 2: Issue Date and Verification Link -->
+                <div class="info-row">
+                    <div class="info-field">
+                        <label class="info-label">Issue Date</label>
+                        <span class="info-value">12/10/2025</span>
+                    </div>
+                    <div class="info-field">
+                        <label class="info-label">Verification Link</label>
+                        <span class="info-value">edu.bd/public</span>
+                    </div>
+                </div>
+
+                <!-- Row 3: Certificate Status -->
+                <div class="info-row">
+                    <div class="info-field status-field">
+                        <label class="info-label">Certificate Status</label>
+                        <div class="status-badge">
+                            <span class="checkmark">✓</span>
+                            <span>VERIFIED</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer role="contentinfo">
+        <p>&copy; Barendra University | Certificate Verification System</p>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Page initialization and enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Certificate Verification Portal loaded successfully');
+            
+            // Add animation to certificate card on load
+            const certificateCard = document.querySelector('.certificate-card');
+            certificateCard.style.opacity = '0';
+            certificateCard.style.transform = 'translateY(20px)';
+            certificateCard.style.transition = 'all 0.6s ease-out';
+            
+            // Trigger animation
+            setTimeout(() => {
+                certificateCard.style.opacity = '1';
+                certificateCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Smooth scroll behavior for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
